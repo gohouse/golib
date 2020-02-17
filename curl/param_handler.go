@@ -1,8 +1,11 @@
 package curl
 
 import (
+	"bytes"
+	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type ParamType int
@@ -17,7 +20,7 @@ const (
 type H map[string]string
 type Param struct {
 	pt  ParamType
-	val interface{}
+	val io.Reader
 
 	h   H
 	cli http.Client
@@ -27,19 +30,32 @@ type ParamHandleFunc func(*Param)
 func ParamString(arg string) ParamHandleFunc {
 	return func(p *Param) {
 		p.pt = PT_String
-		p.val = arg
+		p.val = strings.NewReader(arg)
 	}
 }
-func ParamJson(arg []byte) ParamHandleFunc {
+func ParamJson(arg *[]byte) ParamHandleFunc {
 	return func(p *Param) {
 		p.pt = PT_Json
-		p.val = arg
+		p.val = bytes.NewBuffer(*arg)
+		// 设置header头
+		var newMap = H{"Content-Type": "application/json"}
+		for k, v := range p.h {
+			newMap[k] = v
+		}
+		p.h = newMap
 	}
 }
 func ParamForm(arg url.Values) ParamHandleFunc {
+				//rd = strings.NewReader(c.param.val.(url.Values).Encode())
 	return func(p *Param) {
 		p.pt = PT_Form
-		p.val = arg
+		p.val = strings.NewReader(arg.Encode())
+		// 设置header头
+		var newMap = H{"Content-Type": "application/x-www-form-urlencoded"}
+		for k, v := range p.h {
+			newMap[k] = v
+		}
+		p.h = newMap
 	}
 }
 func ParamHeader(h H) ParamHandleFunc {

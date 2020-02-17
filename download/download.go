@@ -90,6 +90,18 @@ func DownloadSave(url string, body *[]byte, opts ...Option) (err error) {
 	return
 }
 
+func GetDownloadName(url string,prefix ...string) string {
+	var paths = strings.Split(url, "/")
+	if len(paths) == 0 {
+		return ""
+	}
+	name := paths[len(paths)-1]
+	if len(prefix)>0{
+		return strings.Replace(fmt.Sprintf("%s/%s",prefix[0], name),"//","/",-1)
+	}
+	return name
+}
+
 func Rename(src string, dst ...string) string {
 	var realname string
 	if len(dst) > 0 {

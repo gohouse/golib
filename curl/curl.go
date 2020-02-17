@@ -1,24 +1,19 @@
 package curl
 
 import (
-	"bytes"
 	"errors"
 	"github.com/gohouse/t"
-	"io"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"strings"
 )
 
 type Curl struct {
 	param *Param
 }
-type Result struct {
+type Response struct {
+	*http.Response
 	t.T
-	Request *http.Request
-	Response *http.Response
-	Error error
 }
 
 // NewCurl 初始化
@@ -31,15 +26,12 @@ func NewCurl(pts ...ParamHandleFunc) *Curl {
 	return &Curl{p}
 }
 
-func (c *Curl) Request(method, pageurl string, pts ...ParamHandleFunc) (result *Result) {
+func (c *Curl) Request(method, pageurl string, pts ...ParamHandleFunc) (result *Response,err error) {
 	var b []byte
-	//var err error
-	result = &Result{}
+	result = &Response{}
 	for _, o := range pts {
 		o(c.param)
 	}
-	var rd io.Reader = c.buildParam()
-	// "https://www.sex.com/gifs/?page=2"
 
 	client := &http.Client{
 		Transport:     c.param.cli.Transport,
@@ -47,71 +39,55 @@ func (c *Curl) Request(method, pageurl string, pts ...ParamHandleFunc) (result *
 		Jar:           c.param.cli.Jar,
 		Timeout:       c.param.cli.Timeout,
 	}
-	//var req *http.Request
+	var req *http.Request
 	//var resp *http.Response
-	result.Request, result.Error = http.NewRequest(strings.ToUpper(method), pageurl, rd)
-	if result.Error != nil {
-		return
-	}
-	//req.Header.Add("referer", "https://www.sex.com")
-	if c.param.h != nil {
-		for k, v := range c.param.h {
-			result.Request.Header.Add(k, v)
-		}
-	}
-	//处理返回结果
-	result.Response, result.Error = client.Do(result.Request)
-	if result.Error != nil {
-		return
-	}
-	defer result.Response.Body.Close()
-	if result.Response.StatusCode >= 300 {
-		result.Error = errors.New(result.Response.Status)
+	req, err = http.NewRequest(strings.ToUpper(method), pageurl, c.param.val)
+	if err != nil {
 		return
 	}
 
-	b, result.Error = ioutil.ReadAll(result.Response.Body)
-	if result.Error != nil {
+	if c.param.h != nil {
+		for k, v := range c.param.h {
+			req.Header.Add(k, v)
+		}
+	}
+	//处理返回结果
+	result.Response, err = client.Do(req)
+	if err != nil {
+		return
+	}
+	defer result.Response.Body.Close()
+	//r,e := json.Marshal(result.Response.Body)
+	//log.Printf("%s,%v\n",r,e)
+	if result.Response.StatusCode >= 300 {
+		err = errors.New(result.Response.Status)
+		return
+	}
+
+	b, err = ioutil.ReadAll(result.Response.Body)
+	if err != nil {
 		return
 	}
 
 	result.T = t.New(b)
-	return result
+	return
 }
-func (c *Curl) Get(pageurl string, pts ...ParamHandleFunc) *Result {
+func (c *Curl) Get(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
 	return c.Request("GET", pageurl, pts...)
 }
-func (c *Curl) Post(pageurl string, pts ...ParamHandleFunc) *Result {
+func (c *Curl) Post(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
 	return c.Request("POST", pageurl, pts...)
 }
-func (c *Curl) Put(pageurl string, pts ...ParamHandleFunc) *Result {
+func (c *Curl) Put(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
 	return c.Request("PUT", pageurl, pts...)
 }
-func (c *Curl) Delete(pageurl string, pts ...ParamHandleFunc) *Result {
+func (c *Curl) Delete(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
 	return c.Request("DELETE", pageurl, pts...)
 }
-func (c *Curl) Patch(pageurl string, pts ...ParamHandleFunc) *Result {
+func (c *Curl) Patch(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
 	return c.Request("PATCH", pageurl, pts...)
 }
-func (c *Curl) Options(pageurl string, pts ...ParamHandleFunc) *Result {
+func (c *Curl) Options(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
 	return c.Request("OPTIONS", pageurl, pts...)
 }
 
-func (c *Curl) buildParam() (rd io.Reader) {
-	if c.param.pt > 0 {
-		switch c.param.pt {
-		case PT_String:
-			rd = strings.NewReader(c.param.val.(string))
-		case PT_Json:
-			rd = bytes.NewBuffer(c.param.val.([]byte))
-		case PT_Form:
-			rd = strings.NewReader(c.param.val.(url.Values).Encode())
-			var newMap = H{"content-type": "application/x-www-form-urlencoded"}
-			for k, v := range c.param.h {
-				newMap[k] = v
-			}
-			c.param.h = newMap
-		}
-	}
-	return
-}
