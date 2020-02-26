@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/gohouse/file"
-	"github.com/gohouse/random"
+	"github.com/gohouse/golib/file"
+	"github.com/gohouse/golib/random"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -72,6 +72,9 @@ func DownloadSave(url string, body *[]byte, opts ...Option) (err error) {
 	}
 	if opt.FileName == "" {
 		opt.FileName = paths[len(paths)-1]
+	}
+	if opt.Dir==""{
+		opt.Dir = "./"
 	}
 	var name = strings.Replace(fmt.Sprintf("%s/%s", opt.Dir, opt.FileName), "//", "/", -1)
 	if file.FileExists(name) {

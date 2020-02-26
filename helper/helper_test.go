@@ -28,3 +28,14 @@ func TestMin(t *testing.T) {
 	}
 	t.Log("min 测试通过")
 }
+
+func TestWithRecover(t *testing.T) {
+	WithRecover(func() {
+		panic("aaa")
+	})
+	WithRecover(func() {
+		panic("bbb")
+	}, func(err error) {
+		t.Log(err.Error())
+	})
+}

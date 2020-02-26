@@ -2,7 +2,7 @@ package curl
 
 import (
 	"errors"
-	"github.com/gohouse/t"
+	"github.com/gohouse/golib/t"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -57,8 +57,6 @@ func (c *Curl) Request(method, pageurl string, pts ...ParamHandleFunc) (result *
 		return
 	}
 	defer result.Response.Body.Close()
-	//r,e := json.Marshal(result.Response.Body)
-	//log.Printf("%s,%v\n",r,e)
 	if result.Response.StatusCode >= 300 {
 		err = errors.New(result.Response.Status)
 		return
@@ -70,7 +68,7 @@ func (c *Curl) Request(method, pageurl string, pts ...ParamHandleFunc) (result *
 	}
 
 	result.T = t.New(b)
-	return
+	return result,nil
 }
 func (c *Curl) Get(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
 	return c.Request("GET", pageurl, pts...)

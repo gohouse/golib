@@ -1,6 +1,11 @@
 package helper
 
-import "github.com/gohouse/t"
+import (
+	"fmt"
+	"github.com/gohouse/golib/t"
+	"log"
+	"sync"
+)
 
 // Max 获取最大的数
 func Max(args ...interface{}) int {
@@ -36,4 +41,37 @@ func Min(args ...interface{}) int {
 		}
 	}
 	return min
+}
+
+var defaultRecover = func(err error){
+	log.Println("panic err catch:", err)
+}
+func SetDefaultRecover(dr func(err error))  {
+	defaultRecover = dr
+}
+func WithRecover(h func(), errFunc ...func(err error)) {
+	defer func() {
+		if err := recover(); err != nil {
+			if len(errFunc) > 0 {
+				errFunc[0](fmt.Errorf("%v", err))
+			} else {
+				defaultRecover(fmt.Errorf("%v", err))
+			}
+		}
+	}()
+	h()
+}
+
+var mu *sync.Mutex
+var mur *sync.RWMutex
+
+func WithLockContext(ctx func()) {
+	mu.Lock()
+	defer mu.Unlock()
+	ctx()
+}
+func WithRLockContext(ctx func()) {
+	mur.RLock()
+	defer mur.RUnlock()
+	ctx()
 }
