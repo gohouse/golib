@@ -2,7 +2,7 @@ package structEngin
 
 import (
 	"fmt"
-	"github.com/gohouse/gocar/varBindValue"
+	"github.com/gohouse/golib/varBindValue"
 	"testing"
 )
 
