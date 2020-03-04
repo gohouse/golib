@@ -2,6 +2,7 @@ package t
 
 // T ...
 type T interface {
+	iDetermine
 	iSlice
 	iMap
 	iHandle
