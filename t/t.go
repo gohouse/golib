@@ -23,6 +23,8 @@ type T interface {
 	Bool() bool
 	Byte() byte
 	Bytes() []byte
+	Rune() rune
+	Runes() []rune
 }
 
 // Type ...
@@ -125,4 +127,14 @@ func (t Type) Byte() byte {
 // Bytes ...
 func (t Type) Bytes() []byte {
 	return ParseBytes(t.val)
+}
+
+// Rune ...
+func (t Type) Rune() rune {
+	return Rune(t.val)
+}
+
+// Runes ...
+func (t Type) Runes() []rune {
+	return Runes(t.val)
 }

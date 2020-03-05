@@ -19,7 +19,7 @@ func Length() gopass.ValidatorHandler {
 			}
 			rules := strings.Split(rule[0], ":")
 			// 获取data长度
-			if len(t.New(data).String()) != t.New(rules[1]).Int() {
+			if len(t.New(data).Runes()) != t.New(rules[1]).Int() {
 				return errors.New("参数长度有误")
 			}
 			return nil
