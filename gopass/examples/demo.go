@@ -17,7 +17,9 @@ func main() {
 
 	// 自定义错误信息
 	var msg = gopass.Data{"required": "参数缺失啊啊啊"}
-	v := gopass.NewValidator(gopass.Message(msg)).Use(rules.Default())
-	err := v.Validate(data, rule)
+	v := gopass.NewValidator(
+		//gopass.Message(msg),
+		).Use(rules.Default())
+	err := v.Validate(data, rule, msg)
 	fmt.Println(err)
 }

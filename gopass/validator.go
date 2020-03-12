@@ -33,14 +33,15 @@ type Validator struct {
 // ValidatorHandler ...
 type ValidatorHandler func(validator *Validator)
 
-var once sync.Once
+//var once sync.Once
 var vd *Validator
 
 // NewValidator ...
 func NewValidator(opts ...OptionHandler) *Validator {
-	once.Do(func() {
-		vd = &Validator{rule:&sync.Map{},option:&Options{}}
-	})
+	//once.Do(func() {
+		var msg = Data{}
+		vd = &Validator{rule:&sync.Map{},option:&Options{msg}}
+	//})
 	for _, o := range opts {
 		o(vd.option)
 	}
@@ -65,7 +66,9 @@ func (v *Validator) Use(opts ...ValidatorHandler) *Validator {
 // Validate ...
 func (v *Validator) Validate(data map[string]interface{}, rules Rules, msgs ...Data) error {
 	if len(msgs) > 0 {
-		v.option.msg = msgs[0]
+		for k,v2:=range msgs[0] {
+			v.option.msg[k] = v2
+		}
 	}
 	// 验证rules
 	//todo 开启多线程，同时验证多个规则
@@ -95,7 +98,7 @@ func (v *Validator) Validate(data map[string]interface{}, rules Rules, msgs ...D
 				if v.option.msg != nil {
 					// 返回自定义了错误信息
 					if v, ok := v.option.msg[ruleReal]; ok {
-						return errors.New(fmt.Sprintf("%s(%s)", v, field))
+						return errors.New(fmt.Sprintf("%s", v))
 					}
 				}
 				// 返回默认错误信息
