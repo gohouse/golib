@@ -2,7 +2,7 @@ package helper
 
 import (
 	"fmt"
-	"github.com/gohouse/golib/t"
+	"github.com/gohouse/t"
 	"log"
 	"sync"
 )

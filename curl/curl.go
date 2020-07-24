@@ -2,7 +2,7 @@ package curl
 
 import (
 	"errors"
-	"github.com/gohouse/golib/t"
+	"github.com/gohouse/t"
 	"io/ioutil"
 	"net/http"
 	"strings"

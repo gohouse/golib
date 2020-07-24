@@ -2,7 +2,7 @@ package structEngin
 
 import (
 	"github.com/gohouse/golib/helper"
-	"github.com/gohouse/golib/t"
+	"github.com/gohouse/t"
 	"reflect"
 )
 
@@ -11,11 +11,11 @@ import (
 //type Type int
 //
 //const (
-//	Map Type = iota	// map[t.T]t.T
+//	Map Type = iota	// map[t.Type]t.Type
 //	MapString
 //	MapInt64
 //	MapInterface
-//	Slice	// []t.T
+//	Slice	// []t.Type
 //	SliceString
 //	SliceInterface
 //	SliceInt64

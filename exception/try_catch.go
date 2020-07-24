@@ -2,8 +2,8 @@ package exception
 
 import (
 	"fmt"
-	"github.com/gohouse/golib/e"
-	"github.com/gohouse/golib/t"
+	"github.com/gohouse/e"
+	"github.com/gohouse/t"
 )
 
 var (
