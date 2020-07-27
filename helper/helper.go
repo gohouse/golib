@@ -43,10 +43,11 @@ func Min(args ...interface{}) int {
 	return min
 }
 
-var defaultRecover = func(err error){
+var defaultRecover = func(err error) {
 	log.Println("panic err catch:", err)
 }
-func SetDefaultRecover(dr func(err error))  {
+
+func SetDefaultRecover(dr func(err error)) {
 	defaultRecover = dr
 }
 func WithRecover(h func(), errFunc ...func(err error)) {

@@ -15,7 +15,7 @@ func TestFile_IsDir(t *testing.T) {
 }
 
 func TestFilePutContents(t *testing.T) {
-	t.Log(FilePutContents("tmp/xxx.log",[]byte("xxx")))
+	t.Log(FilePutContents("tmp/xxx.log", []byte("xxx")))
 }
 
 func TestFileGetContents(t *testing.T) {

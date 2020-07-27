@@ -128,12 +128,12 @@ func GetAllFiles(dirPth string) (files []string, err error) {
 
 	for _, fi := range dir {
 		if fi.IsDir() {
-			dirs = append(dirs, strings.Replace(dirPth+PthSep+fi.Name(),"//","/",-1))
+			dirs = append(dirs, strings.Replace(dirPth+PthSep+fi.Name(), "//", "/", -1))
 			GetAllFiles(dirPth + PthSep + fi.Name())
 		} else {
 			//ok := strings.HasSuffix(fi.Name(), ".go")
 			//if ok {
-				files = append(files, strings.Replace(dirPth+PthSep+fi.Name(),"//","/",-1))
+			files = append(files, strings.Replace(dirPth+PthSep+fi.Name(), "//", "/", -1))
 			//}
 		}
 	}
@@ -178,18 +178,18 @@ func Tail_f(filename string, lines int64) (rows string) {
 	data := make([]byte, 8192) // 一行的数据
 	totalByte := make([][][]byte, 0)
 	readLines := int64(0)
-	for i := int64(0); i <= fileInfo.Size() / 8192; i++{
+	for i := int64(0); i <= fileInfo.Size()/8192; i++ {
 		readByte := make([][]byte, 0) // 读取一页的数据
-		file.Seek(fileInfo.Size() - offset - 8192*i, io.SeekStart)
+		file.Seek(fileInfo.Size()-offset-8192*i, io.SeekStart)
 		data = make([]byte, 8192)
 		n, err := buf.Read(data)
 		if err == io.EOF {
-			if strings.TrimSpace(string(bytes.Trim(data, "\x00"))) != ""{
+			if strings.TrimSpace(string(bytes.Trim(data, "\x00"))) != "" {
 				readLines++
 				readByte = append(readByte, data)
 				totalByte = append(totalByte, readByte)
 			}
-			if readLines > lines{
+			if readLines > lines {
 				break
 			}
 			continue
@@ -199,23 +199,23 @@ func Tail_f(filename string, lines int64) (rows string) {
 			return
 		}
 		strs := strings.Split(string(data[:n]), "\n")
-		if len(strs) == 1{
+		if len(strs) == 1 {
 			b := bytes.Trim([]byte(strs[0]), "\x00")
-			if len(b) == 0{
+			if len(b) == 0 {
 				continue
 			}
 		}
-		if (readLines + int64(len(strs))) > lines{
+		if (readLines + int64(len(strs))) > lines {
 			strs = strs[int64(len(strs))-lines+readLines:]
 		}
-		for j:=0;j<len(strs);j++{
-			readByte = append(readByte, bytes.Trim([]byte(strs[j]+"\n"),"\x00"))
+		for j := 0; j < len(strs); j++ {
+			readByte = append(readByte, bytes.Trim([]byte(strs[j]+"\n"), "\x00"))
 		}
 		readByte[len(readByte)-1] = bytes.TrimSuffix(readByte[len(readByte)-1], []byte("\n"))
 		totalByte = append(totalByte, readByte)
 		readLines += int64(len(strs))
 
-		if readLines >= lines{
+		if readLines >= lines {
 			break
 		}
 	}
@@ -229,7 +229,6 @@ func ReverseByteArray(s [][][]byte) [][][]byte {
 	}
 	return s
 }
-
 
 func ByteArrayToString(buf [][][]byte) string {
 	str := make([]string, 0)

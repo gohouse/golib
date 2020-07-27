@@ -73,7 +73,7 @@ func DownloadSave(url string, body *[]byte, opts ...Option) (err error) {
 	if opt.FileName == "" {
 		opt.FileName = paths[len(paths)-1]
 	}
-	if opt.Dir==""{
+	if opt.Dir == "" {
 		opt.Dir = "./"
 	}
 	var name = strings.Replace(fmt.Sprintf("%s/%s", opt.Dir, opt.FileName), "//", "/", -1)
@@ -93,14 +93,14 @@ func DownloadSave(url string, body *[]byte, opts ...Option) (err error) {
 	return
 }
 
-func GetDownloadName(url string,prefix ...string) string {
+func GetDownloadName(url string, prefix ...string) string {
 	var paths = strings.Split(url, "/")
 	if len(paths) == 0 {
 		return ""
 	}
 	name := paths[len(paths)-1]
-	if len(prefix)>0{
-		return strings.Replace(fmt.Sprintf("%s/%s",prefix[0], name),"//","/",-1)
+	if len(prefix) > 0 {
+		return strings.Replace(fmt.Sprintf("%s/%s", prefix[0], name), "//", "/", -1)
 	}
 	return name
 }

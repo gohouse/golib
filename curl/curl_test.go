@@ -4,7 +4,7 @@ import "testing"
 
 func TestNewCurl(t *testing.T) {
 	c := NewCurl(ParamHeader(H{"content-type": "application/json"}))
-	res,err := c.Get("http://10.10.35.201:8081/api/v1/appdownloadurl")
+	res, err := c.Get("http://10.10.35.201:8081/api/v1/appdownloadurl")
 	if err != nil {
 		t.Error(err.Error())
 	}

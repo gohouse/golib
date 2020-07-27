@@ -26,7 +26,7 @@ func NewCurl(pts ...ParamHandleFunc) *Curl {
 	return &Curl{p}
 }
 
-func (c *Curl) Request(method, pageurl string, pts ...ParamHandleFunc) (result *Response,err error) {
+func (c *Curl) Request(method, pageurl string, pts ...ParamHandleFunc) (result *Response, err error) {
 	var b []byte
 	result = &Response{}
 	for _, o := range pts {
@@ -68,24 +68,23 @@ func (c *Curl) Request(method, pageurl string, pts ...ParamHandleFunc) (result *
 	}
 
 	result.T = t.New(b)
-	return result,nil
+	return result, nil
 }
-func (c *Curl) Get(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
+func (c *Curl) Get(pageurl string, pts ...ParamHandleFunc) (result *Response, err error) {
 	return c.Request("GET", pageurl, pts...)
 }
-func (c *Curl) Post(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
+func (c *Curl) Post(pageurl string, pts ...ParamHandleFunc) (result *Response, err error) {
 	return c.Request("POST", pageurl, pts...)
 }
-func (c *Curl) Put(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
+func (c *Curl) Put(pageurl string, pts ...ParamHandleFunc) (result *Response, err error) {
 	return c.Request("PUT", pageurl, pts...)
 }
-func (c *Curl) Delete(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
+func (c *Curl) Delete(pageurl string, pts ...ParamHandleFunc) (result *Response, err error) {
 	return c.Request("DELETE", pageurl, pts...)
 }
-func (c *Curl) Patch(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
+func (c *Curl) Patch(pageurl string, pts ...ParamHandleFunc) (result *Response, err error) {
 	return c.Request("PATCH", pageurl, pts...)
 }
-func (c *Curl) Options(pageurl string, pts ...ParamHandleFunc)(result *Response,err error){
+func (c *Curl) Options(pageurl string, pts ...ParamHandleFunc) (result *Response, err error) {
 	return c.Request("OPTIONS", pageurl, pts...)
 }
-

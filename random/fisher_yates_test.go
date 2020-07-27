@@ -6,8 +6,8 @@ import (
 )
 
 func TestFisherYates(t *testing.T) {
-	var arr = []interface{}{"a","b","c","d","e","f","g","h"}
-	for i:=0;i<10;i++{
+	var arr = []interface{}{"a", "b", "c", "d", "e", "f", "g", "h"}
+	for i := 0; i < 10; i++ {
 		go func() {
 			res := FisherYates(arr)
 			t.Log(res)

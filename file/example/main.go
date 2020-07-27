@@ -5,7 +5,7 @@ import (
 	"github.com/gohouse/golib/file"
 )
 
-func main()  {
+func main() {
 	var filepath = "/tmp/xxx.log"
 
 	f := file.NewFile(filepath)

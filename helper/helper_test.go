@@ -6,7 +6,7 @@ import (
 )
 
 func TestMax(t *testing.T) {
-	var tmp = []interface{}{1,2,3}
+	var tmp = []interface{}{1, 2, 3}
 
 	res := Max(tmp...)
 
@@ -18,7 +18,7 @@ func TestMax(t *testing.T) {
 }
 
 func TestMin(t *testing.T) {
-	var tmp = []interface{}{"1",2,3,"4"}
+	var tmp = []interface{}{"1", 2, 3, "4"}
 
 	res := Min(tmp...)
 

@@ -7,12 +7,12 @@ func Rand(args ...interface{}) string {
 	case 1:
 		return Random(args[0].(int))
 	case 2:
-		if r,ok := args[1].(RandType);ok {
+		if r, ok := args[1].(RandType); ok {
 			return Random(args[0].(int), r)
 		}
-		return RandomBetween(args[0].(int),args[1].(int))
+		return RandomBetween(args[0].(int), args[1].(int))
 	case 3:
-		return RandomBetween(args[0].(int),args[1].(int),args[2].(RandType))
+		return RandomBetween(args[0].(int), args[1].(int), args[2].(RandType))
 	default:
 		var rt = getRandType()
 		var length = RandBetween(6, 32)
@@ -55,36 +55,36 @@ func randomReal(length int, fill RandType) string {
 }
 
 func RandCapital(length ...int) string {
-	if len(length)>0 {
+	if len(length) > 0 {
 		return Random(length[0], T_CAPITAL)
 	}
-	return RandomBetween(6,32, T_CAPITAL)
+	return RandomBetween(6, 32, T_CAPITAL)
 }
 
 func RandLowercase(length ...int) string {
-	if len(length)>0 {
+	if len(length) > 0 {
 		return Random(length[0], T_LOWERCASE)
 	}
-	return RandomBetween(6,32, T_LOWERCASE)
+	return RandomBetween(6, 32, T_LOWERCASE)
 }
 
 func RandString(length ...int) string {
-	if len(length)>0 {
+	if len(length) > 0 {
 		return Random(length[0], T_CAPITAL_LOWERCASE)
 	}
-	return Random(RandBetween(6,32), T_CAPITAL_LOWERCASE)
+	return Random(RandBetween(6, 32), T_CAPITAL_LOWERCASE)
 }
 
 func RandNumberic(length ...int) string {
-	if len(length)>0 {
+	if len(length) > 0 {
 		return Random(length[0], T_NUMBERIC)
 	}
-	return Random(RandBetween(6,32), T_NUMBERIC)
+	return Random(RandBetween(6, 32), T_NUMBERIC)
 }
 
 func RandAll(length ...int) string {
-	if len(length)>0 {
+	if len(length) > 0 {
 		return Random(length[0], T_ALL)
 	}
-	return Random(RandBetween(6,32), T_ALL)
+	return Random(RandBetween(6, 32), T_ALL)
 }

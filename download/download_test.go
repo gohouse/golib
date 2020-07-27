@@ -11,7 +11,7 @@ func TestDownload(t *testing.T) {
 	var url = "https://novelbase.oss-cn-hongkong.aliyuncs.com/book_images/00726111fd90f720fad4d6ab5f83dede.jpeg"
 	//var savepath = "./abc/a.jpeg"
 	err := Download(url)
-	if err!=nil {
+	if err != nil {
 		t.Error(err.Error())
 		return
 	}
