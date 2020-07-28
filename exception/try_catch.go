@@ -10,7 +10,7 @@ var (
 	defaultCatcher = func(err e.Error) {
 		fmt.Println("panic err catch:", err.ErrorWithStack())
 	}
-	defaultErrorStack = 5
+	defaultErrorStack = 15
 )
 
 func SetDefaultCatcher(dr func(err e.Error)) {

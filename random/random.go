@@ -1,96 +1,95 @@
 package random
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
-// Rand 默认随机生成6-32位的随机字符串(长度类型皆随机)
-// 如果传入不同的参数,则分别对应不同的函数
-func Rand(args ...interface{}) string {
-	switch len(args) {
-	case 1:
-		return Random(args[0].(int))
-	case 2:
-		if r, ok := args[1].(RandType); ok {
-			return Random(args[0].(int), r)
-		}
-		return RandomBetween(args[0].(int), args[1].(int))
-	case 3:
-		return RandomBetween(args[0].(int), args[1].(int), args[2].(RandType))
-	default:
-		var rt = getRandType()
-		var length = RandBetween(6, 32)
-		return randomReal(length, rt)
+type iRandom interface {
+	Rand(length int, fill RandType) string
+	RandBetween(min, max int) int
+	RandVariable(length int) string
+}
+
+// RandType ...
+type RandType int
+
+const (
+	// 大写字母
+	TypeCAPITAL RandType = 1
+	// 小写字母
+	TypeLOWERCASE = TypeCAPITAL << 1
+	// 数字
+	TypeNUMBERIC = TypeCAPITAL << 2
+)
+
+const (
+	StrNumberic  = `0123456789`
+	StrLowercase = `abcdefghijklmnopqrstuvwxyz`
+	StrCapital   = `ABCDEFGHIJKLMNOPQRSTUVWXYZ`
+)
+
+func (rt RandType) String() string {
+	switch rt {
+	case TypeCAPITAL:
+		return StrCapital
+	case TypeLOWERCASE:
+		return StrLowercase
+	case TypeNUMBERIC:
+		return StrNumberic
+	case TypeCAPITAL | TypeLOWERCASE:
+		return fmt.Sprint(StrCapital, StrLowercase)
+	case TypeCAPITAL | TypeNUMBERIC:
+		return fmt.Sprint(StrCapital, StrNumberic)
+	case TypeLOWERCASE | TypeNUMBERIC:
+		return fmt.Sprint(StrLowercase, StrNumberic)
+	case TypeCAPITAL | TypeLOWERCASE | TypeNUMBERIC:
+		return fmt.Sprint(StrCapital, StrLowercase, StrNumberic)
+	}
+	return ""
+}
+
+// GetRandTypeList 获取给定的字符串类型列表
+func GetRandTypeList() []RandType {
+	return []RandType{
+		// 大写字母
+		TypeCAPITAL,
+		// 小写字母
+		TypeLOWERCASE,
+		// 数字
+		TypeNUMBERIC,
 	}
 }
 
-// Random 随机生成指定长度的随机字符串(类型可选或随机)
-func Random(length int, fill ...RandType) string {
-	var rt RandType
-	if len(fill) > 0 {
-		rt = fill[0]
-	} else {
-		rt = getRandType()
+// Rand 根据给定字符串类型获取指定长度的随机字符串
+func Rand(length int, fill RandType) (res string) {
+	if length == 0 {
+		return ""
 	}
-	return randomReal(length, rt)
+	for length > 0 {
+		length--
+		res += getCharactorFromStr(fill.String())
+	}
+	return
 }
 
-// RandomBetween 随机生成指定长度区间的随机字符串(类型可选或随机)
-func RandomBetween(min, max int, fill ...RandType) string {
-	var rt RandType
-	if len(fill) > 0 {
-		rt = fill[0]
-	} else {
-		rt = getRandType()
+// RandBetween [min,max]
+func RandBetween(min, max int) int {
+	if max < min {
+		return 0
 	}
-	var length = RandBetween(min, max)
-	return randomReal(length, rt)
+	return rand.Intn(max-min+1) + min
 }
 
-func randomReal(length int, fill RandType) string {
-	str := fill.String()
-	var res string
-	var i = length
-	for i > 0 {
-		res += getCharactorFromStr(str)
-		i--
+// RandVariable 随机变量名字,不能以数字开头
+func RandVariable(length int) string {
+	if length == 0 {
+		return ""
 	}
-	return res
+	return fmt.Sprint(Rand(1, TypeLOWERCASE|TypeCAPITAL), Rand(length-1, 7))
 }
 
-func RandCapital(length ...int) string {
-	if len(length) > 0 {
-		return Random(length[0], TypeCAPITAL)
-	}
-	return RandomBetween(6, 32, TypeCAPITAL)
-}
-
-func RandLowercase(length ...int) string {
-	if len(length) > 0 {
-		return Random(length[0], TypeLOWERCASE)
-	}
-	return RandomBetween(6, 32, TypeLOWERCASE)
-}
-
-func RandString(length ...int) string {
-	if len(length) > 0 {
-		return Random(length[0], TypeCAPITAL|TypeLOWERCASE)
-	}
-	return Random(RandBetween(6, 32), TypeCAPITAL|TypeLOWERCASE)
-}
-
-func RandNumberic(length ...int) string {
-	if len(length) > 0 {
-		return Random(length[0], TypeNUMBERIC)
-	}
-	return Random(RandBetween(6, 32), TypeNUMBERIC)
-}
-
-func RandAll(length ...int) string {
-	if len(length) > 0 {
-		return Random(length[0], TypeCAPITAL|TypeLOWERCASE|TypeNUMBERIC)
-	}
-	return Random(RandBetween(6, 32), TypeCAPITAL|TypeLOWERCASE|TypeNUMBERIC)
-}
-
-func RandomVariable(length int) string {
-	return fmt.Sprint(Random(1,TypeLOWERCASE|TypeCAPITAL), Random(length-1))
+func getCharactorFromStr(str string) string {
+	strLen := len(str)
+	return string(([]rune(str))[rand.Intn(strLen-1)])
 }

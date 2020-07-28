@@ -2,10 +2,16 @@ package random
 
 import "testing"
 
-func TestRandBetween(t *testing.T) {
-	for i:=0;i<20;i++{
-		//t.Log(RandBetween(0, 11))
-		//t.Log(RandomBetween(6, 12, TypeNUMBERIC|TypeCAPITAL|TypeLOWERCASE))
-		t.Log(RandomVariable(8))
+func TestRandVariable(t *testing.T) {
+	for i:=0;i<8;i++{
+		t.Log(RandVariable(RandBetween(3, 11)))
 	}
+}
+
+func TestRand(t *testing.T) {
+	t.Log(Rand(5, TypeLOWERCASE))
+}
+
+func TestRandBetween(t *testing.T) {
+	t.Log(RandBetween(7, 11))
 }

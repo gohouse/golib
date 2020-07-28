@@ -5,8 +5,8 @@ import (
 )
 
 // FisherYates 洗牌算法,确保已经 seed 种子
-func FisherYates(arr []interface{}) []interface{} {
-	var newArr []interface{}
+func FisherYates(arr []string) []string {
+	var newArr []string
 	for _, item := range arr {
 		newArr = append(newArr, item)
 	}
