@@ -1,5 +1,7 @@
 package random
 
+import "fmt"
+
 // Rand 默认随机生成6-32位的随机字符串(长度类型皆随机)
 // 如果传入不同的参数,则分别对应不同的函数
 func Rand(args ...interface{}) string {
@@ -56,35 +58,39 @@ func randomReal(length int, fill RandType) string {
 
 func RandCapital(length ...int) string {
 	if len(length) > 0 {
-		return Random(length[0], T_CAPITAL)
+		return Random(length[0], TypeCAPITAL)
 	}
-	return RandomBetween(6, 32, T_CAPITAL)
+	return RandomBetween(6, 32, TypeCAPITAL)
 }
 
 func RandLowercase(length ...int) string {
 	if len(length) > 0 {
-		return Random(length[0], T_LOWERCASE)
+		return Random(length[0], TypeLOWERCASE)
 	}
-	return RandomBetween(6, 32, T_LOWERCASE)
+	return RandomBetween(6, 32, TypeLOWERCASE)
 }
 
 func RandString(length ...int) string {
 	if len(length) > 0 {
-		return Random(length[0], T_CAPITAL_LOWERCASE)
+		return Random(length[0], TypeCAPITAL|TypeLOWERCASE)
 	}
-	return Random(RandBetween(6, 32), T_CAPITAL_LOWERCASE)
+	return Random(RandBetween(6, 32), TypeCAPITAL|TypeLOWERCASE)
 }
 
 func RandNumberic(length ...int) string {
 	if len(length) > 0 {
-		return Random(length[0], T_NUMBERIC)
+		return Random(length[0], TypeNUMBERIC)
 	}
-	return Random(RandBetween(6, 32), T_NUMBERIC)
+	return Random(RandBetween(6, 32), TypeNUMBERIC)
 }
 
 func RandAll(length ...int) string {
 	if len(length) > 0 {
-		return Random(length[0], T_ALL)
+		return Random(length[0], TypeCAPITAL|TypeLOWERCASE|TypeNUMBERIC)
 	}
-	return Random(RandBetween(6, 32), T_ALL)
+	return Random(RandBetween(6, 32), TypeCAPITAL|TypeLOWERCASE|TypeNUMBERIC)
+}
+
+func RandomVariable(length int) string {
+	return fmt.Sprint(Random(1,TypeLOWERCASE|TypeCAPITAL), Random(length-1))
 }
