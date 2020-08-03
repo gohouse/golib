@@ -21,6 +21,8 @@ const (
 	TypeLOWERCASE = TypeCAPITAL << 1
 	// 数字
 	TypeNUMBERIC = TypeCAPITAL << 2
+	// 所有
+	TypeALL = TypeCAPITAL | TypeLOWERCASE | TypeNUMBERIC
 )
 
 const (
@@ -71,6 +73,11 @@ func Rand(length int, fill RandType) (res string) {
 		res += getCharactorFromStr(fill.String())
 	}
 	return
+}
+
+// RandString 随机长度字符串
+func RandString(length int) string {
+	return Rand(length, TypeALL)
 }
 
 // RandBetween [min,max]
