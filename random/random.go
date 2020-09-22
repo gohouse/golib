@@ -7,6 +7,7 @@ import (
 
 type iRandom interface {
 	Rand(length int, fill RandType) string
+	RandString(length int) string
 	RandBetween(min, max int) int
 	RandVariable(length int) string
 }

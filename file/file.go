@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"syscall"
 )
@@ -34,9 +35,13 @@ func FileInit(file string) (err error) {
 		dir := filepath.Dir(file)
 		if dir != "." {
 			// 递归创建目录
-			mask := syscall.Umask(0)
-			defer syscall.Umask(mask)
-			err = os.MkdirAll(dir, 0766)
+			if runtime.GOOS == "windows" {
+				err = os.MkdirAll(dir, 0766)
+			} else {
+				mask := syscall.Umask(0)
+				defer syscall.Umask(mask)
+				err = os.MkdirAll(dir, 0766)
+			}
 		}
 	}
 	return
@@ -80,7 +85,8 @@ func (f *File) Write(p []byte, mods ...int) (n int, err error) {
 
 // ReadFile 读取文件内容
 func (f *File) ReadFile() ([]byte, error) {
-	return ioutil.ReadFile(f.file)
+	file := f.OpenFile()
+	return ioutil.ReadAll(file)
 }
 
 // OpenFile os.OpenFile()

@@ -7,7 +7,7 @@ func newfile() *File {
 }
 
 func TestFile_Exists(t *testing.T) {
-	t.Log(newfile().Exists())
+	t.Log(newfile())
 }
 
 func TestFile_IsDir(t *testing.T) {
