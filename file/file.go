@@ -35,11 +35,11 @@ func FileInit(file string) (err error) {
 		dir := filepath.Dir(file)
 		if dir != "." {
 			// 递归创建目录
-			if runtime.GOOS == "windows" {
-				err = os.MkdirAll(dir, 0766)
-			} else {
+			if runtime.GOOS == "darwin" {
 				mask := syscall.Umask(0)
 				defer syscall.Umask(mask)
+				err = os.MkdirAll(dir, 0766)
+			} else {
 				err = os.MkdirAll(dir, 0766)
 			}
 		}
