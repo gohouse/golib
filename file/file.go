@@ -8,9 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
-	"syscall"
 )
 
 // File 文件对象
@@ -35,13 +33,13 @@ func FileInit(file string) (err error) {
 		dir := filepath.Dir(file)
 		if dir != "." {
 			// 递归创建目录
-			if runtime.GOOS == "darwin" {
-				mask := syscall.Umask(0)
-				defer syscall.Umask(mask)
+			//if runtime.GOOS == "darwin" {
+			//	mask := syscall.Umask(0)
+			//	defer syscall.Umask(mask)
+			//	err = os.MkdirAll(dir, 0766)
+			//} else {
 				err = os.MkdirAll(dir, 0766)
-			} else {
-				err = os.MkdirAll(dir, 0766)
-			}
+			//}
 		}
 	}
 	return
