@@ -177,7 +177,7 @@ func BindVal(dest, src interface{}) error {
 		return nil
 	}
 
-	return fmt.Errorf("unsupported Scan, storing driver.Value type %T into type %T", src, dest)
+	return fmt.Errorf("unsupported Scan, storing driver.Type type %T into type %T", src, dest)
 }
 func cloneBytes(b []byte) []byte {
 	if b == nil {
